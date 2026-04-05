@@ -1,0 +1,72 @@
+services:
+  app:
+    build:
+      context: ./docker/php
+    container_name: hmcts_app
+    working_dir: /var/www/html
+    volumes:
+      - ./application:/var/www/html
+    networks:
+      - laravel
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - DB_HOST=mysql
+      - DB_DATABASE=laravel
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - REDIS_HOST=redis
+      - QUEUE_CONNECTION=redis
+
+  nginx:
+    image: nginx:latest
+    container_name: hmcts_nginx
+    ports:
+      - "8081:80"
+    volumes:
+      - ./application:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - laravel
+
+  mysql:
+    platform: linux/amd64
+    image: mysql:5.7
+    container_name: hmcts_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+    ports:
+      - "3301:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - laravel
+
+  redis:
+    image: redis:7
+    container_name: hmcts_redis
+    ports:
+      - "6371:6379"
+    networks:
+      - laravel
+
+  logdeck:
+    image: amoabakelvin/logdeck:latest
+    container_name: hmcts_logdeck
+    ports:
+      - "8121:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/host/proc:ro
+    restart: unless-stopped
+
+networks:
+  laravel:
+    driver: bridge
+
+volumes:
+  dbdata:
