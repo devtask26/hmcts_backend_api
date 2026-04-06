@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('caseNumber');
             $table->string('status');
-            $table->string('description')->unique();
+            $table->string('description')->nullable();
             $table->timestamp('due_date');
             $table->timestamps();
         });
