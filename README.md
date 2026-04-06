@@ -45,9 +45,16 @@ php artisan key:generate
 # Run database migrations
 php artisan migrate
 
-# Install frontend assets (if needed)
-npm install
-npm run build
+# Create Users (Required Before Task Creation)
+```bash
+# Add a user using the Makefile from outside the container
+make add-user NAME="John Doe" EMAIL="john@example.com"
+
+# You can add multiple users
+make add-user NAME="Jane Smith" EMAIL="jane@example.com"
+```
+
+**Important**: You must create at least one user before creating tasks, as tasks require a valid `user_id` that references an existing user in the database.
 ```
 
 ### 4. Database Operations
@@ -134,10 +141,12 @@ Content-Type: application/json
   "message": "The given data was invalid.",
   "errors": {
     "title": ["The title field is required."],
-    "user_id": ["The user id field is required."]
+    "user_id": ["The user id field is required.", "The selected user id is invalid."]
   }
 }
 ```
+
+**Note**: The `user_id` must reference an existing user in the database. Use `make add-user` to create users first.
 
 ### Get All Tasks
 ```bash
