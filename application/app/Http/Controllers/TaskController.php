@@ -63,7 +63,7 @@ class TaskController extends Controller
             );
         }
 
-        $task = $this->taskService->createTask($request->validated());
+        $task = $this->taskService->createTask($request->all());
         Log::info('Task created', ['task_id' => $task->id]);
 
         return $this->success($task, 'Task created successfully', 201);
@@ -88,7 +88,7 @@ class TaskController extends Controller
                 );
             }
 
-            $task = $this->taskService->updateTask($id, $request->validated());
+            $task = $this->taskService->updateTask($id, $request->all());
             Log::info('Task updated', ['task_id' => $id]);
 
             return $this->success($task, 'Task updated successfully');
