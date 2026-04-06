@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('title');
+            $table->string('caseNumber');
+            $table->string('status');
             $table->string('description')->unique();
             $table->timestamp('due_date');
             $table->timestamps();

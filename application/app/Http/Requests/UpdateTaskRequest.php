@@ -17,6 +17,8 @@ class UpdateTaskRequest extends FormRequest
             'title' => ['string', 'max:255'],
             'description' => ['string'],
             'due_date' => ['date', 'after:now'],
+            'caseNumber' => ['required', 'string'],
+            'status' => ['required', 'string'],
         ];
     }
 }
