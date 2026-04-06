@@ -41,7 +41,6 @@ class TaskServiceIntegrationTest extends TestCase
 
     public function test_service_with_real_database_operations(): void
     {
-        // Create task through service
         $taskData = [
             'user_id' => $this->user->id,
             'title' => 'Service Integration Test',
@@ -57,16 +56,13 @@ class TaskServiceIntegrationTest extends TestCase
         $this->assertEquals($taskData['title'], $task->title);
         $this->assertDatabaseHas('tasks', ['id' => $task->id]);
 
-        // Read task through service
         $retrievedTask = $this->taskService->getTask($task->id);
         $this->assertEquals($task->id, $retrievedTask->id);
 
-        // Update task through service
         $updateData = ['title' => 'Updated Service Task'];
         $updatedTask = $this->taskService->updateTask($task->id, $updateData);
         $this->assertEquals('Updated Service Task', $updatedTask->title);
 
-        // Delete task through service
         $deleteResult = $this->taskService->deleteTask($task->id);
         $this->assertTrue($deleteResult);
         $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
@@ -86,15 +82,12 @@ class TaskServiceIntegrationTest extends TestCase
 
     public function test_service_error_handling_with_database(): void
     {
-        // Test non-existent task
         $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
         $this->taskService->getTask(99999);
 
-        // Test update non-existent task
         $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
         $this->taskService->updateTask(99999, ['title' => 'Should not work']);
 
-        // Test delete non-existent task
         $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
         $this->taskService->deleteTask(99999);
     }
