@@ -278,7 +278,6 @@ hmcts_backend_api/
 │   │   ├── Http/
 │   │   │   ├── Controllers/          # API Controllers
 │   │   │   ├── Middleware/          # Custom Middleware
-│   │   │   └── Requests/             # Form Request Validation
 │   │   ├── Models/                   # Eloquent Models
 │   │   ├── Repositories/             # Data Access Layer
 │   │   ├── Services/                 # Business Logic Layer
